@@ -6,7 +6,7 @@ use Exception;
 
 class Gateway
 {
-    public $endpoint = 'https://redigo.serveo.net/';
+    public $endpoint = 'https://pay.ateros.fr/';
     private $app_token;
     private $curl;
 
