@@ -6,15 +6,15 @@ use Gateway\Gateway;
 
 $gateway = new Gateway;
 
-$gateway->setAppToken('j2TWMMcRHHf9WnkuNIGADivlZQiXK5nxNEP2nlVQX2AHmUErOtvPTWTYMExA');
+$gateway->setAppToken('xxxxxxxx');
 
 $payment = $gateway->create([
     "amount" => 50,
-    "customer" => "gregjlen@gmail.com",
+    "customer" => "customer@example.org",
     "currency" => "EUR",
     "identifier" => "order-25",
     "descriptor" => "Achat test",
-    "processor" => "stripe"
+    "processor" => "paypal"
 ]);
 
-echo $gateway->endpoint . $payment->id;
+echo $payment->redirect_url;
