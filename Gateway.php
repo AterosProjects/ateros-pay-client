@@ -29,8 +29,7 @@ class Gateway
     private static function assert($bool, $message)
     {
         if (!$bool){
-            var_dump(new Exception($message));
-            die();
+            throw new Exception($message);
         }
     }
 
