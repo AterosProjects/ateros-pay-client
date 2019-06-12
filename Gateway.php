@@ -6,7 +6,7 @@ use Exception;
 
 class Gateway
 {
-    public $endpoint = 'https://pay.ateros.fr/';
+    public $endpoint = 'http://127.0.0.1:8000';
     private $app_token;
     private $curl;
 
