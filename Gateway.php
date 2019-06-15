@@ -6,7 +6,7 @@ use Exception;
 
 class Gateway
 {
-    public $endpoint = 'http://127.0.0.1:8000';
+    public $endpoint = 'https://pay.ateros.fr/api/payment';
     private $app_token;
     private $curl;
 
@@ -51,7 +51,7 @@ class Gateway
      * @return mixed
      * @throws Exception
      */
-    public function create(array $payment)
+    public function createPayment(array $payment)
     {
         $this::assert(isset($this->app_token), "app_token must be set to use this function");
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $payment);
