@@ -59,7 +59,11 @@ class Gateway
         $response = curl_exec($this->curl);
         curl_close($this->curl);
 
-        return json_decode($response);
+        $object = json_decode($response);
+
+        $object->success = $object->message = "Payment created successfully" ? True : False;
+
+        return $object;
     }
 
     /**
