@@ -8,7 +8,7 @@ $gateway = new Gateway;
 
 $gateway->setAppToken('xxxxxxx');
 
-$payment = $gateway->create([
+$payment = $gateway->createPayment([
     "amount" => 50,
     "customer" => "customer@example.org",
     "currency" => "EUR",
