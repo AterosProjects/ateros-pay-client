@@ -6,10 +6,21 @@ use Gateway\Gateway;
 
 $gateway = new Gateway;
 
-$gateway->setAppToken('j2TWMMcRHHf9WnkuNIGADivlZQiXK5nxNEP2nlVQX2AHmUErOtvPTWTYMExA');
+$gateway->setAppToken('');
 
 function handle_payment($payment){
-    echo "Paiement " . $payment['id'] . " validé";
+    $file = 'log.txt';
+    $current = file_get_contents($file);
+    $current .= "Paiement " . $payment['id'] . " validé\n";
+    file_put_contents($file, $current);
 }
 
-$gateway->handle($_POST, 'handle_payment');
+function handle_subscription($subscription){
+    $file = 'log.txt';
+    $current = file_get_contents($file);
+    $current .= "Abonnement " . $subscription['id'] . " validé\n";
+    file_put_contents($file, $current);
+}
+
+$gateway->handle($_POST, 'payment', 'handle_payment');
+$gateway->handle($_POST, 'subscription', 'handle_subscription');

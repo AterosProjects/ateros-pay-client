@@ -8,7 +8,8 @@ $gateway = new Gateway;
 
 $gateway->setAppToken('');
 
-$payment = $gateway->createPayment([
+$subscription = $gateway->createSubscription([
+    "period" => "month",
     "amount" => 50,
     "customer" => "customer@example.org",
     "currency" => "EUR",
@@ -18,9 +19,9 @@ $payment = $gateway->createPayment([
     "sandbox" => True,
 ]);
 
-if ($payment->success){
-    echo $payment->data->redirect_url;
+if ($subscription->success){
+    echo $subscription->data->redirect_url;
 } else {
     echo "Error : " . PHP_EOL;
-    var_dump($payment->errors);
+    var_dump($subscription->errors);
 }

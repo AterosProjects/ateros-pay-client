@@ -6,17 +6,16 @@ use Exception;
 
 class Gateway
 {
-    public $endpoint = 'https://pay.ateros.fr/api/payment';
+    public $endpoint = 'https://pay.ateros.fr/api';
     private $app_token;
     private $curl;
 
     /**
      * Gateway constructor.
-     * @param $app_token
      */
     public function __construct()
     {
-        $this->curl = curl_init($this->endpoint);
+        $this->curl = curl_init();
 
         curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
     }
@@ -34,16 +33,36 @@ class Gateway
     }
 
     /**
+     * @param $id
+     * @return string
+     */
+    private static function getNamefromId($id)
+    {
+        $code = substr($id, 0, 3);
+
+        if($code === "sub"){
+            return "subscription";
+        }
+
+        if ($code === "pmt"){
+            return "payment";
+        }
+    }
+
+    /**
      * @param array $request
+     * @param string $type
      * @param callable $handler
      * @throws Exception
      */
-    public function handle(array $request, callable $handler)
+    public function handle(array $request, string $type, callable $handler)
     {
         $this::assert(isset($this->app_token), "app_token must be set to use this function");
         $this::assert($request['app_token'] == hash('sha256', $this->app_token), "callback message could not be verified");
 
-        $handler($request);
+        if ($this::getNamefromId($request['id']) == $type){
+            $handler($request);
+        }
     }
 
     /**
@@ -56,12 +75,44 @@ class Gateway
         $this::assert(isset($this->app_token), "app_token must be set to use this function");
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $payment);
 
+        curl_setopt($this->curl, CURLOPT_URL, $this->endpoint . "/payment");
+
         $response = curl_exec($this->curl);
         curl_close($this->curl);
 
         $object = json_decode($response);
 
-        $object->success = $object->message = "Payment created successfully" ? True : False;
+        if(!$object){
+            throw new Exception('Could not connect to Ateros Pay');
+        }
+
+        $object->success = $object->message == "Payment created successfully" ? True : False;
+
+        return $object;
+    }
+
+    /**
+     * @param array $subscription
+     * @return mixed
+     * @throws Exception
+     */
+    public function createSubscription(array $subscription)
+    {
+        $this::assert(isset($this->app_token), "app_token must be set to use this function");
+        curl_setopt($this->curl, CURLOPT_POSTFIELDS, $subscription);
+
+        curl_setopt($this->curl, CURLOPT_URL, $this->endpoint . "/subscription");
+
+        $response = curl_exec($this->curl);
+        curl_close($this->curl);
+
+        $object = json_decode($response);
+
+        if(!$object){
+            throw new Exception('Could not connect to Ateros Pay');
+        }
+
+        $object->success = $object->message == "Subscription created successfully" ? True : False;
 
         return $object;
     }
@@ -72,6 +123,11 @@ class Gateway
     public function setAppToken($app_token)
     {
         $this->app_token = $app_token;
-        curl_setopt($this->curl, CURLOPT_HTTPHEADER, array("Authorization: Bearer " . $this->app_token));
+        curl_setopt($this->curl, CURLOPT_HTTPHEADER,
+            [
+                "Authorization: Bearer " . $this->app_token,
+                "Accept: application/json",
+            ]
+        );
     }
 }
