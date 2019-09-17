@@ -74,17 +74,16 @@ class Gateway
     {
         $this::assert(isset($this->app_token), "app_token must be set to use this function");
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $payment);
-
         curl_setopt($this->curl, CURLOPT_URL, $this->endpoint . "/payment");
 
         $response = curl_exec($this->curl);
+        if (!$response) {
+            throw new Exception(curl_error($this->curl), curl_errno($this->curl));
+        }
+
         curl_close($this->curl);
 
         $object = json_decode($response);
-
-        if(!$object){
-            throw new Exception('Could not connect to Ateros Pay');
-        }
 
         $object->success = $object->message == "Payment created successfully" ? True : False;
 
@@ -104,6 +103,9 @@ class Gateway
         curl_setopt($this->curl, CURLOPT_URL, $this->endpoint . "/subscription");
 
         $response = curl_exec($this->curl);
+        if (!$response) {
+            throw new Exception(curl_error($this->curl), curl_errno($this->curl));
+        }
         curl_close($this->curl);
 
         $object = json_decode($response);
