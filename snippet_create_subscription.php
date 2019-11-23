@@ -8,7 +8,7 @@ $gateway = new Gateway;
 
 $gateway->setAppToken('');
 
-$subscription = $gateway->createSubscription([
+$subscription = $gateway->create('subscription', [
     "period" => "month",
     "amount" => 50,
     "customer" => "customer@example.org",
