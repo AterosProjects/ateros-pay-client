@@ -1,7 +1,6 @@
 <?php
 
-namespace Gateway;
-
+namespace Ateros\Pay;
 use Exception;
 
 class Gateway

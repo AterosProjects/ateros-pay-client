@@ -1,8 +1,8 @@
 <?php
 
-require('Gateway.php');
+require __DIR__ . '../vendor/autoload.php';
 
-use Gateway\Gateway;
+use Ateros\Pay\Gateway;
 
 $gateway = new Gateway;
 
