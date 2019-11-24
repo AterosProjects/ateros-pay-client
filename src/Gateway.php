@@ -1,6 +1,7 @@
 <?php
 
 namespace Ateros\Pay;
+
 use Exception;
 
 class Gateway
@@ -22,36 +23,39 @@ class Gateway
     /**
      * @param $bool
      * @param $message
+     *
      * @throws Exception
      */
     private static function assert($bool, $message)
     {
-        if (!$bool){
+        if (!$bool) {
             throw new Exception($message);
         }
     }
 
     /**
      * @param $id
+     *
      * @return string
      */
     private static function getNamefromId($id)
     {
         $code = substr($id, 0, 3);
 
-        if($code === 'sub'){
+        if ($code === 'sub') {
             return 'subscription';
         }
 
-        if ($code === "pmt"){
+        if ($code === 'pmt') {
             return 'payment';
         }
     }
 
     /**
-     * @param array $request
-     * @param string $type
+     * @param array    $request
+     * @param string   $type
      * @param callable $handler
+     *
      * @throws Exception
      */
     public function handle(array $request, $type, callable $handler)
@@ -59,22 +63,24 @@ class Gateway
         $this::assert(isset($this->app_token), 'app_token must be set to use this function');
         $this::assert($request['app_token'] == hash('sha256', $this->app_token), 'callback message could not be verified');
 
-        if ($this::getNamefromId($request['id']) == $type){
+        if ($this::getNamefromId($request['id']) == $type) {
             $handler($request);
         }
     }
 
     /**
      * @param string $type
-     * @param array $data
-     * @return mixed
+     * @param array  $data
+     *
      * @throws Exception
+     *
+     * @return mixed
      */
     public function create($type, array $data)
     {
         $this::assert(isset($this->app_token), 'app_token must be set to use this function');
         curl_setopt($this->curl, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($this->curl, CURLOPT_URL, $this->endpoint . '/' . $type);
+        curl_setopt($this->curl, CURLOPT_URL, $this->endpoint.'/'.$type);
 
         $response = curl_exec($this->curl);
         if (!$response) {
@@ -85,7 +91,7 @@ class Gateway
 
         $object = json_decode($response);
 
-        $object->success = $object->message == ucfirst($type) . ' created successfully' ? True : False;
+        $object->success = $object->message == ucfirst($type).' created successfully' ? true : false;
 
         return $object;
     }
@@ -98,7 +104,7 @@ class Gateway
         $this->app_token = $app_token;
         curl_setopt($this->curl, CURLOPT_HTTPHEADER,
             [
-                'Authorization: Bearer ' . $this->app_token,
+                'Authorization: Bearer '.$this->app_token,
                 'Accept: application/json',
             ]
         );
