@@ -27,12 +27,12 @@ composer require ateros/pay:dev-master
 
 Do not forget to include the library via the composer autoloader at the beginning of your file:
 ```php
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . 'vendor/autoload.php';
 ```
 
-Then, to instantiate a gateway object :
+Then, you can start to play with objects from the Ateros\Pay\Objects namespace :
 ````php
-use Ateros\Pay\Gateway;
+use Ateros\Pay\Objects\Subscription;
 
-$gateway = new Gateway;
+$subscription = Subscription::create(['your-data']);
 ```` 
