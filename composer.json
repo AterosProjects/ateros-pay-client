@@ -1,10 +1,14 @@
 {
-    "name": "ateros/pay",
-    "description": "Ateros Pay PHP client",
-    "type": "library",
-    "autoload": {
-        "classmap": [
-            "src/Gateway.php"
-        ]
+  "name": "ateros/pay",
+  "description": "Ateros Pay PHP client",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Ateros\\Pay\\": "src/"
     }
+  },
+  "require": {
+    "ext-curl": "*",
+    "ext-json": "*"
+  }
 }
