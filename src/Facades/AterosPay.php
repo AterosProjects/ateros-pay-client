@@ -2,18 +2,23 @@
 
 namespace Ateros\Pay\Facades;
 
-use Ateros\Pay\Http\Client;
-
 class AterosPay
 {
-    public static function setApiKey($key)
+    /**
+     * Store the API key in the environment
+     * @param $key
+     */
+    public static function setApiKey($key): bool
     {
-        $_ENV['ATEROS_PAY_KEY'] = $key;
-        $_ENV['ATEROS_PAY_CLIENT'] = (new Client())->setApiKey($_ENV['ATEROS_PAY_KEY']);
+        return putenv("ATEROS_PAY_KEY=$key");
     }
 
-    public static function client()
+    /**
+     * Store the API endpoint in the environment
+     * @param $endpoint
+     */
+    public static function setApiEndpoint($endpoint): bool
     {
-        return $_ENV['ATEROS_PAY_CLIENT'];
+        return putenv("ATEROS_PAY_ENDPOINT=$endpoint");
     }
 }

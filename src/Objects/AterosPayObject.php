@@ -20,6 +20,7 @@ class AterosPayObject
 
     public static function all()
     {
+        var_dump(self::client()->get(static::$endpoint));
         return array_map(function ($object) {
             return new static($object);
         }, self::client()->get(static::$endpoint)['data']);
@@ -42,6 +43,6 @@ class AterosPayObject
 
     protected static function client(): Client
     {
-        return (new Client())->setApiKey($_ENV['ATEROS_PAY_KEY']);
+        return new Client();
     }
 }
