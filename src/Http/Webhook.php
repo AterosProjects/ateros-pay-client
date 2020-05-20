@@ -20,7 +20,7 @@ class Webhook
 
     public static function verify($payload, string $signature)
     {
-        if(hash_hmac('sha256', $payload, $_ENV['ATEROS_PAY_KEY']) !== $signature){
+        if(hash_hmac('sha256', $payload, getenv('ATEROS_PAY_KEY')) !== $signature){
             throw new \Exception('Invalid signature');
         };
 
